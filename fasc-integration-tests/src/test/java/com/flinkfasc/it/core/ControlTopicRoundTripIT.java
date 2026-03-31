@@ -79,9 +79,12 @@ class ControlTopicRoundTripIT {
         app1Consumer.start();
         app2Consumer.start();
 
-        // Wait for both consumers to receive partition assignment before any test produces messages
-        app1Consumer.waitForAssignment(10_000);
-        app2Consumer.waitForAssignment(10_000);
+        // Wait for both consumers to receive partition assignment before any test produces messages.
+        // CI environments (GitHub Actions) can be slow — use generous timeouts.
+        app1Consumer.waitForAssignment(30_000);
+        app2Consumer.waitForAssignment(30_000);
+        // Allow one extra poll cycle so the consumer is actively polling before we produce
+        Thread.sleep(2_000);
     }
 
     @AfterEach
