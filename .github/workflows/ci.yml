@@ -99,8 +99,8 @@ jobs:
 
       - name: Verify Docker image
         run: |
-          docker run --rm fasc-coordinator:ci java -version
-          echo "Docker image built successfully"
+          docker run --rm --entrypoint java fasc-coordinator:ci -version
+          echo "Docker image built and verified successfully"
 
       - name: Upload JARs
         uses: actions/upload-artifact@v4

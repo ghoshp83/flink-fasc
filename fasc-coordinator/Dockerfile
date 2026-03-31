@@ -33,7 +33,7 @@ USER fasc
 
 WORKDIR /app
 
-COPY --from=builder /build/fasc-coordinator/target/fasc-coordinator-*.jar app.jar
+COPY --from=builder /build/fasc-coordinator/target/fasc-coordinator-*-exec.jar app.jar
 
 EXPOSE 8080
 
