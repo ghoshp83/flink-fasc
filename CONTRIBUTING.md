@@ -18,7 +18,7 @@ to new transport backends and leader election implementations.
 ### Build
 
 ```bash
-git clone https://github.com/your-org/flink-fasc.git
+git clone https://github.com/ghoshp83/flink-fasc.git
 cd flink-fasc
 
 # Build without tests

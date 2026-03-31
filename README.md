@@ -502,13 +502,22 @@ cost vs Keyspaces or Aurora depending on access patterns.
 
 ---
 
+## Documentation
+
+| Document | Description |
+|---|---|
+| [DESIGN.md](DESIGN.md) | Full architectural rationale, protocol specification, failure mode analysis |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Visual architecture diagrams (Mermaid) — system overview, sequence diagrams, state machines |
+| [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md) | Step-by-step developer guide — class-by-class walkthrough, how to add FASC to your job |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to set up your dev environment and submit pull requests |
+| [USER_GUIDE.md](USER_GUIDE.md) | Deployment guide and operational runbook |
+
+---
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to set up your development environment and
 submit pull requests.
-
-See [DESIGN.md](../DESIGN.md) for the full architectural rationale, protocol specification,
-and failure mode analysis.
 
 ---
 
