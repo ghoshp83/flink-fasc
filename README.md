@@ -3,7 +3,7 @@
 > **Zero-downtime, zero-message-loss upgrade protocol for Apache Flink applications.**
 
 [![Apache License 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Java 11+](https://img.shields.io/badge/Java-11%2B-orange.svg)](https://openjdk.java.net/)
+[![Java 17+](https://img.shields.io/badge/Java-17%2B-orange.svg)](https://openjdk.java.net/)
 [![Flink 1.18](https://img.shields.io/badge/Flink-1.18-red.svg)](https://flink.apache.org/)
 [![Spring Boot 3.x](https://img.shields.io/badge/Spring%20Boot-3.x-green.svg)](https://spring.io/projects/spring-boot)
 
@@ -210,7 +210,7 @@ FASC_INITIAL_MODE=ACTIVE           # ACTIVE for app1, SHADOW for app2
 
 ## Requirements
 
-- Java 11+
+- Java 17+
 - Apache Flink 1.18+
 - Apache Kafka 3.x (or AWS MSK)
 - **AWS:** EKS, MSK, DynamoDB, S3, CloudWatch
