@@ -1,0 +1,85 @@
+replicaCount: 2
+
+image:
+  repository: your-ecr-account.dkr.ecr.eu-west-2.amazonaws.com/fasc-coordinator
+  tag: "1.0.0-SNAPSHOT"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+serviceAccount:
+  create: true
+  name: fasc-coordinator
+  annotations:
+    eks.amazonaws.com/role-arn: ""  # Set to FASC coordinator IAM role ARN
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi
+
+env:
+  FASC_BOOTSTRAP_SERVERS: ""
+  FASC_CONTROL_TOPIC: "fasc-control-topic"
+  FASC_APP1_JOB_ID: ""
+  FASC_APP2_JOB_ID: ""
+  FASC_APP1_FLINK_REST_URL: "http://app1-jobmanager:8081"
+  FASC_APP2_FLINK_REST_URL: "http://app2-jobmanager:8081"
+  FASC_APP1_CONSUMER_GROUP: "consumer-group-app1"
+  FASC_APP2_CONSUMER_GROUP: "consumer-group-app2"
+  FASC_SAVEPOINT_S3_BUCKET: ""
+  FASC_SAVEPOINT_S3_PREFIX: "fasc/savepoints/"
+  AWS_REGION: "eu-west-2"
+  FASC_DYNAMODB_LEADER_TABLE: "fasc-leader"
+  FASC_DYNAMODB_LOCK_TABLE: "fasc-coordinator-lock"
+  JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:+UseG1GC"
+
+livenessProbe:
+  httpGet:
+    path: /fasc/health
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /fasc/ready
+    port: 8080
+  initialDelaySeconds: 20
+  periodSeconds: 5
+  failureThreshold: 3
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/actuator/prometheus"
+
+nodeSelector:
+  role: fasc-coordinator
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - fasc-coordinator
+          topologyKey: kubernetes.io/hostname
+
+autoscaling:
+  enabled: false
+
+configMap:
+  create: true

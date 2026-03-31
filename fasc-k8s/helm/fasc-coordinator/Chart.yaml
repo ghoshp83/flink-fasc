@@ -1,0 +1,13 @@
+apiVersion: v2
+name: fasc-coordinator
+description: FASC Coordinator — Flink Active-Standby Coordinator service
+type: application
+version: 1.0.0
+appVersion: "1.0.0-SNAPSHOT"
+keywords:
+  - flink
+  - fasc
+  - active-standby
+  - zero-downtime
+maintainers:
+  - name: flink-fasc contributors

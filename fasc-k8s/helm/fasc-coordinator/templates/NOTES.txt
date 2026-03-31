@@ -1,0 +1,24 @@
+FASC Coordinator has been deployed successfully.
+
+1. Check coordinator pods are running:
+   kubectl get pods -n fasc -l app.kubernetes.io/name=fasc-coordinator
+
+2. Check which replica holds the active coordinator lock:
+   kubectl exec -n fasc deploy/fasc-coordinator -- \
+     curl -s http://localhost:8080/fasc/status | jq '{handoffState, currentFlinkLeader, isLockHolder, app2MaxLagMs}'
+
+3. Trigger a handoff (e.g. before upgrading App1):
+   kubectl exec -n fasc deploy/fasc-coordinator -- \
+     curl -s -X POST http://localhost:8080/fasc/handoff \
+     -H "Content-Type: application/json" \
+     -d '{"requestedBy":"ops","reason":"upgrading app1"}'
+
+4. Monitor handoff progress:
+   watch -n2 'kubectl exec -n fasc deploy/fasc-coordinator -- \
+     curl -s http://localhost:8080/fasc/status | jq .'
+
+5. Check CloudWatch metrics (namespace: FlinkFASC):
+   - SinkMode (0=SHADOW, 1=ACTIVE per app)
+   - App2ConsumerLagMs
+   - HandoffDurationMs
+   - SplitBrainDetected (alert if > 0)

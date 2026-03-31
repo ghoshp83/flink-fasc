@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+spring:
+  application:
+    name: fasc-coordinator
+  kafka:
+    bootstrap-servers: ${FASC_BOOTSTRAP_SERVERS}
+
+fasc:
+  aws:
+    enabled: true
+  bootstrapServers: ${FASC_BOOTSTRAP_SERVERS}
+  controlTopic: ${FASC_CONTROL_TOPIC:fasc-control-topic}
+  coordinatorId: ${HOSTNAME:fasc-coordinator}
+  app1JobId: ${FASC_APP1_JOB_ID:}
+  app2JobId: ${FASC_APP2_JOB_ID:}
+  app1FlinkRestUrl: ${FASC_APP1_FLINK_REST_URL:http://app1-jobmanager:8081}
+  app2FlinkRestUrl: ${FASC_APP2_FLINK_REST_URL:http://app2-jobmanager:8081}
+  app1ConsumerGroup: ${FASC_APP1_CONSUMER_GROUP:consumer-group-app1}
+  app2ConsumerGroup: ${FASC_APP2_CONSUMER_GROUP:consumer-group-app2}
+  savepointS3Bucket: ${FASC_SAVEPOINT_S3_BUCKET:}
+  savepointS3Prefix: ${FASC_SAVEPOINT_S3_PREFIX:fasc/savepoints/}
+  awsRegion: ${AWS_REGION:eu-west-2}
+  dynamoDbLeaderTable: ${FASC_DYNAMODB_LEADER_TABLE:fasc-leader}
+  dynamoDbLockTable: ${FASC_DYNAMODB_LOCK_TABLE:fasc-coordinator-lock}
+  savepointMetadataTable: ${FASC_SAVEPOINT_METADATA_TABLE:fasc-savepoint-metadata}
+  businessTopic: ${KAFKA_BUSINESS_TOPIC:business-topic}
+  offsetMonitorIntervalMs: 5000
+  lagStabilityWindowMs: 10000
+  heartbeatIntervalMs: 5000
+
+logging:
+  level:
+    com.flinkfasc: INFO
+    org.springframework.kafka: WARN
+    org.apache.kafka: WARN

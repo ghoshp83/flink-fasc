@@ -1,0 +1,43 @@
+# Maven build output
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment and secrets
+.env
+*.pem
+*.key
+credentials.json
+
+# Terraform state (do not commit to public repos)
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# Log files
+*.log
+
+# Maven wrapper (if using)
+.mvn/wrapper/maven-wrapper.jar
+
+# Claude Code internal memory (not part of the project)
+memory/
+.claude/
