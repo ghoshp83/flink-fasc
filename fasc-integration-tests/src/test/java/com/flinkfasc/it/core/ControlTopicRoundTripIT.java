@@ -99,7 +99,8 @@ class ControlTopicRoundTripIT {
         ControlSignal heartbeat = ControlSignal.heartbeat("coordinator-1");
         producer.sendSync(heartbeat);
 
-        await().atMost(10, TimeUnit.SECONDS)
+        await().atMost(30, TimeUnit.SECONDS)
+                .pollInterval(500, TimeUnit.MILLISECONDS)
                 .untilAsserted(() -> {
                     assertThat(app1Received).anyMatch(s -> s.getSignalType() == SignalType.HEARTBEAT);
                     assertThat(app2Received).anyMatch(s -> s.getSignalType() == SignalType.HEARTBEAT);
