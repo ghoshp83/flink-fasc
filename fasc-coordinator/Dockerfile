@@ -1,19 +1,22 @@
 # ── Stage 1: Build ────────────────────────────────────────────────────────────
-FROM maven:3.9-eclipse-temurin-11 AS builder
+FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /build
 
-# Copy parent POM and all module POMs first (layer-cache friendly)
+# Copy parent POM and all module POMs first (layer-cache friendly).
+# Include fasc-integration-tests and fasc-examples POMs so Maven can resolve
+# the reactor, even though we only build fasc-coordinator.
 COPY pom.xml .
-COPY fasc-core/pom.xml       fasc-core/pom.xml
-COPY fasc-aws/pom.xml        fasc-aws/pom.xml
-COPY fasc-coordinator/pom.xml fasc-coordinator/pom.xml
-COPY fasc-examples/pom.xml   fasc-examples/pom.xml
+COPY fasc-core/pom.xml              fasc-core/pom.xml
+COPY fasc-aws/pom.xml               fasc-aws/pom.xml
+COPY fasc-coordinator/pom.xml       fasc-coordinator/pom.xml
+COPY fasc-examples/pom.xml          fasc-examples/pom.xml
+COPY fasc-integration-tests/pom.xml fasc-integration-tests/pom.xml
 
 # Download all dependencies (cached as a layer if POMs don't change)
-RUN mvn dependency:go-offline -pl fasc-coordinator -am -q
+RUN mvn dependency:go-offline -pl fasc-coordinator -am -q || true
 
-# Copy source
+# Copy source (only the modules needed to build fasc-coordinator)
 COPY fasc-core/src       fasc-core/src
 COPY fasc-aws/src        fasc-aws/src
 COPY fasc-coordinator/src fasc-coordinator/src
@@ -22,7 +25,7 @@ COPY fasc-coordinator/src fasc-coordinator/src
 RUN mvn package -pl fasc-coordinator -am -DskipTests -q
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
-FROM eclipse-temurin:11-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 # Non-root user for security
 RUN addgroup -S fasc && adduser -S fasc -G fasc
